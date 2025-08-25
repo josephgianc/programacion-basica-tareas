@@ -1,0 +1,157 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/josephgianc/programacion-basica-tareas/blob/main/Programaci%C3%B3n%20tareas%20b%C3%A1sicas\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# ============================\n",
+        "# Sistema de Gestión de Tareas\n",
+        "# ============================\n",
+        "\n",
+        "from collections import deque\n",
+        "\n",
+        "# --------- Estructuras ----------\n",
+        "tareas = []             # Lista de todas las tareas\n",
+        "pila_tareas = []        # Pila para tareas urgentes (LIFO)\n",
+        "cola_tareas = deque()   # Cola para tareas en orden de llegada (FIFO)\n",
+        "\n",
+        "# Árbol Binario para clasificar tareas por prioridad\n",
+        "class Nodo:\n",
+        "    def __init__(self, prioridad, descripcion):\n",
+        "        self.prioridad = prioridad\n",
+        "        self.descripcion = descripcion\n",
+        "        self.izq = None\n",
+        "        self.der = None\n",
+        "\n",
+        "class ArbolTareas:\n",
+        "    def __init__(self):\n",
+        "        self.raiz = None\n",
+        "\n",
+        "    def insertar(self, prioridad, descripcion):\n",
+        "        def _insertar(nodo, prioridad, descripcion):\n",
+        "            if nodo is None:\n",
+        "                return Nodo(prioridad, descripcion)\n",
+        "            if prioridad < nodo.prioridad:\n",
+        "                nodo.izq = _insertar(nodo.izq, prioridad, descripcion)\n",
+        "            else:\n",
+        "                nodo.der = _insertar(nodo.der, prioridad, descripcion)\n",
+        "            return nodo\n",
+        "\n",
+        "        self.raiz = _insertar(self.raiz, prioridad, descripcion)\n",
+        "\n",
+        "    def mostrar_en_orden(self, nodo):\n",
+        "        if nodo:\n",
+        "            self.mostrar_en_orden(nodo.izq)\n",
+        "            print(f\"Prioridad {nodo.prioridad}: {nodo.descripcion}\")\n",
+        "            self.mostrar_en_orden(nodo.der)\n",
+        "\n",
+        "\n",
+        "arbol_tareas = ArbolTareas()\n",
+        "\n",
+        "# --------- Funciones ----------\n",
+        "def agregar_tarea(descripcion, prioridad, urgente=False):\n",
+        "    # Lista\n",
+        "    tareas.append(descripcion)\n",
+        "    # Cola\n",
+        "    cola_tareas.append(descripcion)\n",
+        "    # Pila (si es urgente)\n",
+        "    if urgente:\n",
+        "        pila_tareas.append(descripcion)\n",
+        "    # Árbol\n",
+        "    arbol_tareas.insertar(prioridad, descripcion)\n",
+        "    print(f\"Tarea '{descripcion}' agregada con prioridad {prioridad}.\")\n",
+        "\n",
+        "def eliminar_tarea(descripcion):\n",
+        "    if descripcion in tareas:\n",
+        "        tareas.remove(descripcion)\n",
+        "        print(f\"Tarea '{descripcion}' eliminada.\")\n",
+        "    else:\n",
+        "        print(\"La tarea no existe.\")\n",
+        "\n",
+        "def mostrar_tareas():\n",
+        "    print(\"\\n📌 Lista de Tareas:\", tareas)\n",
+        "    print(\"📌 Cola de Tareas:\", list(cola_tareas))\n",
+        "    print(\"📌 Pila de Tareas:\", pila_tareas)\n",
+        "    print(\"📌 Árbol de Tareas (en orden por prioridad):\")\n",
+        "    arbol_tareas.mostrar_en_orden(arbol_tareas.raiz)\n",
+        "    print()\n",
+        "\n",
+        "\n",
+        "# --------- Ejemplo de uso ----------\n",
+        "agregar_tarea(\"Hacer informe\", 2)\n",
+        "agregar_tarea(\"Revisar correo\", 3)\n",
+        "agregar_tarea(\"Atender reunión\", 1, urgente=True)\n",
+        "agregar_tarea(\"Preparar presentación\", 4)\n",
+        "\n",
+        "mostrar_tareas()\n",
+        "\n",
+        "eliminar_tarea(\"Revisar correo\")\n",
+        "mostrar_tareas()\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "xfb4wlnzWFbA",
+        "outputId": "b20f22bc-25e3-4b21-abb4-51a8e2f3b1b3"
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Tarea 'Hacer informe' agregada con prioridad 2.\n",
+            "Tarea 'Revisar correo' agregada con prioridad 3.\n",
+            "Tarea 'Atender reunión' agregada con prioridad 1.\n",
+            "Tarea 'Preparar presentación' agregada con prioridad 4.\n",
+            "\n",
+            "📌 Lista de Tareas: ['Hacer informe', 'Revisar correo', 'Atender reunión', 'Preparar presentación']\n",
+            "📌 Cola de Tareas: ['Hacer informe', 'Revisar correo', 'Atender reunión', 'Preparar presentación']\n",
+            "📌 Pila de Tareas: ['Atender reunión']\n",
+            "📌 Árbol de Tareas (en orden por prioridad):\n",
+            "Prioridad 1: Atender reunión\n",
+            "Prioridad 2: Hacer informe\n",
+            "Prioridad 3: Revisar correo\n",
+            "Prioridad 4: Preparar presentación\n",
+            "\n",
+            "Tarea 'Revisar correo' eliminada.\n",
+            "\n",
+            "📌 Lista de Tareas: ['Hacer informe', 'Atender reunión', 'Preparar presentación']\n",
+            "📌 Cola de Tareas: ['Hacer informe', 'Revisar correo', 'Atender reunión', 'Preparar presentación']\n",
+            "📌 Pila de Tareas: ['Atender reunión']\n",
+            "📌 Árbol de Tareas (en orden por prioridad):\n",
+            "Prioridad 1: Atender reunión\n",
+            "Prioridad 2: Hacer informe\n",
+            "Prioridad 3: Revisar correo\n",
+            "Prioridad 4: Preparar presentación\n",
+            "\n"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "name": "Te damos la bienvenida a Colab",
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
