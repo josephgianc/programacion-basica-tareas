@@ -1,0 +1,58 @@
+class Nodo:
+    def __init__(self, valor):
+        self.valor = valor
+        self.izq = None
+        self.der = None
+
+class ArbolBinario:
+    def __init__(self):
+        self.raiz = None
+
+    def insertar(self, valor):
+        if self.raiz is None:
+            self.raiz = Nodo(valor)
+        else:
+            self._insertar(self.raiz, valor)
+
+    def _insertar(self, nodo, valor):
+        if valor < nodo.valor:
+            if nodo.izq is None:
+                nodo.izq = Nodo(valor)
+            else:
+                self._insertar(nodo.izq, valor)
+        else:
+            if nodo.der is None:
+                nodo.der = Nodo(valor)
+            else:
+                self._insertar(nodo.der, valor)
+
+    def inorder(self, nodo):
+        if nodo:
+            self.inorder(nodo.izq)
+            print(nodo.valor, end=" ")
+            self.inorder(nodo.der)
+
+    def preorder(self, nodo):
+        if nodo:
+            print(nodo.valor, end=" ")
+            self.preorder(nodo.izq)
+            self.preorder(nodo.der)
+
+    def postorder(self, nodo):
+        if nodo:
+            self.postorder(nodo.izq)
+            self.postorder(nodo.der)
+            print(nodo.valor, end=" ")
+
+# Ejemplo de uso:
+arbol = ArbolBinario()
+elementos = [50, 30, 70, 20, 40, 60, 80]
+for e in elementos:
+    arbol.insertar(e)
+
+print("Recorrido inorder:")
+arbol.inorder(arbol.raiz)
+print("\nRecorrido preorder:")
+arbol.preorder(arbol.raiz)
+print("\nRecorrido postorder:")
+arbol.postorder(arbol.raiz)
