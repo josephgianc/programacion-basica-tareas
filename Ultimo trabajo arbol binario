@@ -1,0 +1,119 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Sección nueva"
+      ],
+      "metadata": {
+        "id": "qc0OpT9r4wmv"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "fXNctCHY45pE"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "class Nodo:\n",
+        "    def __init__(self, valor):\n",
+        "        self.valor = valor\n",
+        "        self.izq = None\n",
+        "        self.der = None\n",
+        "\n",
+        "class ArbolBinario:\n",
+        "    def __init__(self):\n",
+        "        self.raiz = None\n",
+        "\n",
+        "    def insertar(self, valor):\n",
+        "        if self.raiz is None:\n",
+        "            self.raiz = Nodo(valor)\n",
+        "        else:\n",
+        "            self._insertar(self.raiz, valor)\n",
+        "\n",
+        "    def _insertar(self, nodo, valor):\n",
+        "        if valor < nodo.valor:\n",
+        "            if nodo.izq is None:\n",
+        "                nodo.izq = Nodo(valor)\n",
+        "            else:\n",
+        "                self._insertar(nodo.izq, valor)\n",
+        "        else:\n",
+        "            if nodo.der is None:\n",
+        "                nodo.der = Nodo(valor)\n",
+        "            else:\n",
+        "                self._insertar(nodo.der, valor)\n",
+        "\n",
+        "    def inorder(self, nodo):\n",
+        "        if nodo:\n",
+        "            self.inorder(nodo.izq)\n",
+        "            print(nodo.valor, end=\" \")\n",
+        "            self.inorder(nodo.der)\n",
+        "\n",
+        "    def preorder(self, nodo):\n",
+        "        if nodo:\n",
+        "            print(nodo.valor, end=\" \")\n",
+        "            self.preorder(nodo.izq)\n",
+        "            self.preorder(nodo.der)\n",
+        "\n",
+        "    def postorder(self, nodo):\n",
+        "        if nodo:\n",
+        "            self.postorder(nodo.izq)\n",
+        "            self.postorder(nodo.der)\n",
+        "            print(nodo.valor, end=\" \")\n",
+        "\n",
+        "# Ejemplo de uso:\n",
+        "arbol = ArbolBinario()\n",
+        "elementos = [50, 30, 70, 20, 40, 60, 80]\n",
+        "for e in elementos:\n",
+        "    arbol.insertar(e)\n",
+        "\n",
+        "print(\"Recorrido inorder:\")\n",
+        "arbol.inorder(arbol.raiz)\n",
+        "print(\"\\nRecorrido preorder:\")\n",
+        "arbol.preorder(arbol.raiz)\n",
+        "print(\"\\nRecorrido postorder:\")\n",
+        "arbol.postorder(arbol.raiz)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-1mnUBDR3aiY",
+        "outputId": "a15f0486-54c6-4d48-b47c-9d545ab078e4"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Recorrido inorder:\n",
+            "20 30 40 50 60 70 80 \n",
+            "Recorrido preorder:\n",
+            "50 30 20 40 70 60 80 \n",
+            "Recorrido postorder:\n",
+            "20 40 30 60 80 70 50 "
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "toc_visible": true,
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
